@@ -4,7 +4,7 @@ export function useTheme() {
   const [darkMode, setDarkMode] = useState(() => {
     // Safe check for window object
     if (typeof window === 'undefined') {
-      return false;
+      return true; // Default to dark mode
     }
 
     try {
@@ -13,11 +13,11 @@ export function useTheme() {
         return savedTheme === 'dark';
       }
 
-      // Check system preference
-      return window.matchMedia('(prefers-color-scheme: dark)').matches;
+      // Default to dark mode instead of system preference
+      return true;
     } catch (error) {
-      console.error('Error accessing localStorage or matchMedia:', error);
-      return false;
+      console.error('Error accessing localStorage:', error);
+      return true; // Default to dark mode on error
     }
   });
 
@@ -38,35 +38,6 @@ export function useTheme() {
       console.error('Error updating theme:', error);
     }
   }, [darkMode]);
-
-  // Listen for system theme changes
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-
-    try {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      
-      const handleChange = (e: MediaQueryListEvent) => {
-        // Only update if user hasn't manually set a preference
-        const savedTheme = localStorage.getItem('theme');
-        if (!savedTheme) {
-          setDarkMode(e.matches);
-        }
-      };
-
-      // Check if addEventListener is available (newer browsers)
-      if (mediaQuery.addEventListener) {
-        mediaQuery.addEventListener('change', handleChange);
-        return () => mediaQuery.removeEventListener('change', handleChange);
-      } else if (mediaQuery.addListener) {
-        // Fallback for older browsers
-        mediaQuery.addListener(handleChange);
-        return () => mediaQuery.removeListener(handleChange);
-      }
-    } catch (error) {
-      console.error('Error setting up theme change listener:', error);
-    }
-  }, []);
 
   const toggleTheme = () => {
     setDarkMode(prev => !prev);
