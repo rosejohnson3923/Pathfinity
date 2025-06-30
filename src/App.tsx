@@ -13,6 +13,7 @@ function App() {
   const [lessonsLoading, setLessonsLoading] = useState(true);
   const [totalRemainingTime, setTotalRemainingTime] = useState(0);
   const [isFinnAssistantOpen, setIsFinnAssistantOpen] = useState(false);
+  const [showFullDashboard, setShowFullDashboard] = useState(false); // Default to collapsed
 
   useEffect(() => {
     loadTodaysLessons();
@@ -69,13 +70,21 @@ function App() {
     }
   };
 
+  const toggleDashboardMode = () => {
+    setShowFullDashboard(!showFullDashboard);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-8">
-          <WelcomeCard onOpenFinnAssistant={() => setIsFinnAssistantOpen(true)} />
+          <WelcomeCard 
+            onOpenFinnAssistant={() => setIsFinnAssistantOpen(true)}
+            showFullDashboard={showFullDashboard}
+            onToggleDashboard={toggleDashboardMode}
+          />
           
           {/* Integrated Learning Section */}
           <div className="w-full">
@@ -87,8 +96,47 @@ function App() {
             />
           </div>
           
-          <LearningProgress />
-          <RecentActivity />
+          {/* Collapsed State Placeholder */}
+          {!showFullDashboard && (
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-xl p-6 border border-blue-100 dark:border-blue-800 text-center">
+              <div className="flex items-center justify-center space-x-3 mb-3">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm5-18v4h3V3h-3z"/>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  Additional Dashboard Sections Available
+                </h3>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                Learning Progress and Recent Activity sections are collapsed for a focused view. 
+                Click "Enhanced Dashboard Mode" in the welcome section above to expand all sections.
+              </p>
+              <div className="flex items-center justify-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <span>Learning Progress</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span>Recent Activity</span>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {/* Conditionally render expanded sections */}
+          {showFullDashboard && (
+            <>
+              <div className="transform transition-all duration-500 ease-in-out animate-in slide-in-from-top-4">
+                <LearningProgress />
+              </div>
+              <div className="transform transition-all duration-500 ease-in-out animate-in slide-in-from-top-4" style={{ animationDelay: '100ms' }}>
+                <RecentActivity />
+              </div>
+            </>
+          )}
         </div>
       </main>
 

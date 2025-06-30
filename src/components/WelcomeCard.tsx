@@ -1,12 +1,14 @@
 import React from 'react';
-import { Sparkles, Calendar, Clock, Bot, MessageCircle } from 'lucide-react';
+import { Sparkles, Calendar, Clock, Bot, MessageCircle, BarChart3, ChevronDown, ChevronUp } from 'lucide-react';
 import { mockUser } from '../data/mockData';
 
 interface WelcomeCardProps {
   onOpenFinnAssistant: () => void;
+  showFullDashboard: boolean;
+  onToggleDashboard: () => void;
 }
 
-export function WelcomeCard({ onOpenFinnAssistant }: WelcomeCardProps) {
+export function WelcomeCard({ onOpenFinnAssistant, showFullDashboard, onToggleDashboard }: WelcomeCardProps) {
   const getCurrentTime = () => {
     try {
       return new Date().toLocaleTimeString('en-US', { 
@@ -62,7 +64,7 @@ export function WelcomeCard({ onOpenFinnAssistant }: WelcomeCardProps) {
 
       <div className="relative">
         <div className="flex items-start justify-between mb-4">
-          <div>
+          <div className="flex-1">
             <div className="flex items-center space-x-2 mb-2">
               <Sparkles className="w-5 h-5 text-yellow-300" />
               <span className="text-sm font-medium opacity-90">{getGreeting()}</span>
@@ -74,7 +76,7 @@ export function WelcomeCard({ onOpenFinnAssistant }: WelcomeCardProps) {
             <p className="text-blue-100 mb-3">Ready to continue your learning journey?</p>
             
             {/* Finn Introduction Paragraph */}
-            <div className="flex items-start space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+            <div className="flex items-start space-x-3 bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20 mb-4">
               <img 
                 src="/finn-enhanced.jpeg" 
                 alt="Finn AI Assistant" 
@@ -93,20 +95,37 @@ export function WelcomeCard({ onOpenFinnAssistant }: WelcomeCardProps) {
                 <p className="text-blue-50 text-sm leading-relaxed">
                   <span className="font-semibold text-white">Meet Finn, your AI learning guide!</span> I'm here to help you navigate your daily lessons, track your progress, and discover new tools to enhance your learning experience.
                 </p>
-                <button 
-                  onClick={onOpenFinnAssistant}
-                  className="mt-2 flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-400/80 to-purple-400/80 hover:from-blue-400 hover:to-purple-400 rounded-lg text-white text-sm font-medium transition-all duration-200 hover:shadow-lg transform hover:scale-105"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>Chat with Finn</span>
-                </button>
+                <div className="flex flex-wrap gap-2 mt-3">
+                  <button 
+                    onClick={onOpenFinnAssistant}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-400/80 to-purple-400/80 hover:from-blue-400 hover:to-purple-400 rounded-lg text-white text-sm font-medium transition-all duration-200 hover:shadow-lg transform hover:scale-105"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Chat with Finn</span>
+                  </button>
+                  
+                  <button 
+                    onClick={onToggleDashboard}
+                    className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-emerald-400/80 to-teal-400/80 hover:from-emerald-400 hover:to-teal-400 rounded-lg text-white text-sm font-medium transition-all duration-200 hover:shadow-lg transform hover:scale-105"
+                    aria-expanded={showFullDashboard}
+                    aria-controls="dashboard-sections"
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    <span>{showFullDashboard ? 'Focused View' : 'Enhanced Dashboard'}</span>
+                    {showFullDashboard ? (
+                      <ChevronUp className="w-4 h-4 transition-transform duration-200" />
+                    ) : (
+                      <ChevronDown className="w-4 h-4 transition-transform duration-200" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
           <img
             src={getUserAvatar()}
             alt={getUserName()}
-            className="w-12 h-12 rounded-full border-2 border-white/20 object-cover"
+            className="w-12 h-12 rounded-full border-2 border-white/20 object-cover flex-shrink-0 ml-4"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
               target.src = 'https://images.pexels.com/photos/3785079/pexels-photo-3785079.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=2';
