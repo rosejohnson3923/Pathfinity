@@ -111,7 +111,7 @@ export function WelcomeCard({ onOpenFinnAssistant, showFullDashboard, onToggleDa
                     aria-controls="dashboard-sections"
                   >
                     <BarChart3 className="w-4 h-4" />
-                    <span>{showFullDashboard ? 'Focused View' : 'Enhanced Dashboard'}</span>
+                    <span>{showFullDashboard ? 'Focused View' : 'Enhanced View'}</span>
                     {showFullDashboard ? (
                       <ChevronUp className="w-4 h-4 transition-transform duration-200" />
                     ) : (
