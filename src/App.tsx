@@ -111,7 +111,7 @@ function App() {
               </div>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
                 Learning Progress and Recent Activity sections are collapsed for a focused view. 
-                Click "Enhanced Dashboard Mode" in the welcome section above to expand all sections.
+                Click "Enhanced Dashboard View" in the welcome section above to expand all sections.
               </p>
               <div className="flex items-center justify-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
                 <div className="flex items-center space-x-2">
